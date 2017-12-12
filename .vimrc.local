@@ -1,0 +1,161 @@
+Bundle 'maksimr/vim-jsbeautify'
+Bundle 'einars/js-beautify'
+let g:DisableAutoPHPFolding=1
+let g:ack_default_options = " -H --nocolor --nogroup --column"
+let NERDTreeQuitOnOpen=0
+set mouse=a
+" ################################
+" 使用molokai作为主题
+color molokai
+" 设置Special不使用斜体，否则括号等都是斜体
+hi Special gui=none
+" 设置终端使用256色
+let g:rehash256 = 1
+" 使用老背景
+let g:molokai_original = 1
+
+" 搜索缓冲区
+" nnoremap <leader>bs :CtrlPBuffer<CR>
+nnoremap <leader>bf :CtrlPFunky<CR>
+nmap <leader>ht <Esc>:set filetype=html<CR>
+nmap <leader>pt <Esc>:set filetype=php<CR>
+nmap <leader>jt <Esc>:set filetype=javascript<CR>
+nmap <F3>  <ESC>:Ack<Space> 
+map  <C-S> <ESC>:w<CR>
+set nospell
+""set guifont=新宋体\ 10
+set guifont=Courier\ 10\ Pitch
+set guifontwide=新宋体\ 10,Microsoft\ Yahei\ 10.5,WenQuanYi\ Zen\ Hei\ 10
+
+Bundle 'mattn/emmet-vim'
+Bundle "vcscommand.vim"
+nmap <Leader>vc  <Esc>:VCSCommit<CR>
+nmap <Leader>vu  <Esc>:VCSUpdate<CR>
+
+"UnBundle 'spf13/PIV'
+"UnBundle 'Lokaltog\vim-powerline'
+"UnBundle 'bling/vim-airline'
+"UnBundle 'Shougo/neocomplcache'
+
+cnoremap <C-A> <Home>
+inoremap <C-A> <ESC>^i
+nnoremap <C-A> ^
+noremap <C-E> <End>
+cnoremap <C-F> <Right>
+cnoremap <C-B> <Left>
+cnoremap <Esc>b <S-Left>
+cnoremap <Esc>f <S-Right>
+inoremap <C-D> <Del>
+inoremap <c-f> <Right>
+
+autocmd BufNewFile,BufRead *.html.php set filetype=html
+set noeb vb t_vb=
+set ai si
+
+"  ###########
+let g:input_toggle = 1
+function! Fcitx2en()
+   let s:input_status = system("fcitx-remote")
+   if s:input_status == 2
+      let g:input_toggle = 1
+      let l:a = system("fcitx-remote -c")
+   endif
+endfunction
+
+function! Fcitx2zh()
+   let s:input_status = system("fcitx-remote")
+   if s:input_status != 2 && g:input_toggle == 1
+      let l:a = system("fcitx-remote -o")
+      let g:input_toggle = 0
+   endif
+endfunction
+
+set ttimeoutlen=150
+"autocmd InsertLeave * call Fcitx2en()
+"autocmd InsertEnter * call Fcitx2zh()
+
+"Bundle 'mattn/jscomplete-vim'
+"autocmd FileType javascript :setl omnifunc=jscomplete#CompleteJS
+
+" 执行python文件，并将错误显示到quickfix窗口
+nmap <F5> <ESC>:w<CR>:call CheckPythonSyntax()<CR>
+function CheckPythonSyntax() 
+    let mp = &makeprg 
+    let ef = &errorformat 
+    let exeFile = expand("%:t") 
+    setlocal makeprg=python\ -u 
+    set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m 
+    silent make % 
+    cw
+    let &makeprg     = mp 
+    let &errorformat = ef 
+endfunction
+set foldlevelstart=99
+
+if exists('$TMUX')
+  set term=screen-256color
+endif
+
+"if exists('$ITERM_PROFILE')
+  "if exists('$TMUX') 
+    "let t_SI = "<Esc>[3 q"
+    "let t_EI = "<Esc>[0 q"
+  "else
+    "let t_SI = "<Esc>]50;CursorShape=1x7"
+    "let t_EI = "<Esc>]50;CursorShape=0x7"
+  "endif
+"end
+
+ "for tmux to automatically set paste and nopaste mode at the time pasting (as
+ "happens in VIM UI)
+"function! WrapForTmux(s)
+  "if !exists('$TMUX')
+    "return a:s
+  "endif
+  "let tmux_start = "<Esc>Ptmux;"
+  "let tmux_end = "<Esc>"
+  "return tmux_start . substitute(a:s, "<Esc>", "<Esc><Esc>", 'g') . tmux_end
+"endfunction
+"let t_SI .= WrapForTmux("<Esc>[?2004h")
+"let t_EI .= WrapForTmux("<Esc>[?2004l")
+
+"function! XTermPasteBegin()
+  "set pastetoggle=<Esc>[201~
+  "set paste
+  "return ""
+"endfunction
+
+"inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+" Yank text to the OS X clipboard" 将文本复制到OS X剪贴板中
+noremap <leader>y "*y
+noremap <leader>yy "*Y
+" Preserve indentation while pasting text from the OS X clipboard 在粘贴OS X剪贴板中的文本时保留缩进
+noremap <leader>p :set paste<CR>:put *<CR>:set nopaste<CR>
+nnoremap <silent> <C-S> :w<CR>
+map <C-S> <Esc>:w<CR>
+imap jj <Esc> <C-S>
+imap <C-e> <C-o>$
+imap <C-a> <C-o>0
+vnoremap v <Esc>
+set backspace=indent,eol,start
+set ai
+set si
+
+map <c-f> :call JsBeautify()<cr>
+autocmd FileType javascript noremap <buffer>  <c-f> :call JsBeautify()<cr>
+autocmd FileType json noremap <buffer> <c-f> :call JsonBeautify()<cr>
+autocmd FileType jsx noremap <buffer> <c-f> :call JsxBeautify()<cr>
+autocmd FileType html noremap <buffer> <c-f> :call HtmlBeautify()<cr>
+autocmd FileType css noremap <buffer> <c-f> :call CSSBeautify()<cr>
+autocmd FileType javascript vnoremap <buffer>  <c-f> :call RangeJsBeautify()<cr>
+autocmd FileType json vnoremap <buffer> <c-f> :call RangeJsonBeautify()<cr>
+autocmd FileType jsx vnoremap <buffer> <c-f> :call RangeJsxBeautify()<cr>
+autocmd FileType html vnoremap <buffer> <c-f> :call RangeHtmlBeautify()<cr>
+autocmd FileType css vnoremap <buffer> <c-f> :call RangeCSSBeautify()<cr>
+set nofoldenable
+"set nobackup
+set noswapfile
+set nolist
+set ttyfast
+set lazyredraw
+set path+=/home/eblics/projects/jqr/trunk/src/**
