@@ -48,6 +48,7 @@ cnoremap <Esc>f <S-Right>
 inoremap <C-D> <Del>
 inoremap <c-f> <Right>
 
+
 autocmd BufNewFile,BufRead *.html.php set filetype=html
 set noeb vb t_vb=
 set ai si
