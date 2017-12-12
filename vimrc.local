@@ -27,7 +27,7 @@ set nospell
 set guifont=Courier\ 10\ Pitch
 set guifontwide=新宋体\ 10,Microsoft\ Yahei\ 10.5,WenQuanYi\ Zen\ Hei\ 10
 
-Bundle 'mattn/emmet-vim'
+"Bundle 'mattn/emmet-vim'
 Bundle "vcscommand.vim"
 nmap <Leader>vc  <Esc>:VCSCommit<CR>
 nmap <Leader>vu  <Esc>:VCSUpdate<CR>
